@@ -1,0 +1,26 @@
+syntax = "proto3";
+
+package chat;
+
+service Chat {
+  rpc SayHello (SayHelloRequest) returns (SayHelloResponse);
+  rpc Messages (stream MessagesRequest) returns (stream MessagesResponse);
+}
+
+message SayHelloRequest {
+  string name = 1;
+}
+
+message SayHelloResponse {
+  string hello = 1;
+}
+
+message MessagesRequest {
+  string username = 1;
+  string message = 2;
+}
+
+message MessagesResponse {
+  string username = 1;
+  string message = 2;
+}
