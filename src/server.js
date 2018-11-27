@@ -1,12 +1,18 @@
 const grpc = require('grpc')
 
-const proto = grpc.load('proto/chat.proto')
+const services = require('../gen/chat_grpc_pb')
+const messages = require('../gen/chat_pb')
+
 const server = new grpc.Server()
 
-server.addService(proto.chat.Chat.service, {
+server.addService(services.ChatService, {
 	sayHello(call, callback){
-    const name = call.request.name
-    callback(null, `Hello, ${name}`)
+    const name = call.request.getName()
+
+    const helloResponse = new messages.SayHelloResponse()
+    helloResponse.setHello(`Hello, ${name}`)
+
+    callback(null, helloResponse)
 	}
 })
 

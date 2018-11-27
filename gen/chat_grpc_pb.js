@@ -4,42 +4,73 @@
 var grpc = require('grpc');
 var chat_pb = require('./chat_pb.js');
 
-function serialize_chat_MessageStreamRequest(arg) {
-  if (!(arg instanceof chat_pb.MessageStreamRequest)) {
-    throw new Error('Expected argument of type chat.MessageStreamRequest');
+function serialize_chat_MessagesRequest(arg) {
+  if (!(arg instanceof chat_pb.MessagesRequest)) {
+    throw new Error('Expected argument of type chat.MessagesRequest');
   }
   return new Buffer(arg.serializeBinary());
 }
 
-function deserialize_chat_MessageStreamRequest(buffer_arg) {
-  return chat_pb.MessageStreamRequest.deserializeBinary(new Uint8Array(buffer_arg));
+function deserialize_chat_MessagesRequest(buffer_arg) {
+  return chat_pb.MessagesRequest.deserializeBinary(new Uint8Array(buffer_arg));
 }
 
-function serialize_chat_MessageStreamResponse(arg) {
-  if (!(arg instanceof chat_pb.MessageStreamResponse)) {
-    throw new Error('Expected argument of type chat.MessageStreamResponse');
+function serialize_chat_MessagesResponse(arg) {
+  if (!(arg instanceof chat_pb.MessagesResponse)) {
+    throw new Error('Expected argument of type chat.MessagesResponse');
   }
   return new Buffer(arg.serializeBinary());
 }
 
-function deserialize_chat_MessageStreamResponse(buffer_arg) {
-  return chat_pb.MessageStreamResponse.deserializeBinary(new Uint8Array(buffer_arg));
+function deserialize_chat_MessagesResponse(buffer_arg) {
+  return chat_pb.MessagesResponse.deserializeBinary(new Uint8Array(buffer_arg));
+}
+
+function serialize_chat_SayHelloRequest(arg) {
+  if (!(arg instanceof chat_pb.SayHelloRequest)) {
+    throw new Error('Expected argument of type chat.SayHelloRequest');
+  }
+  return new Buffer(arg.serializeBinary());
+}
+
+function deserialize_chat_SayHelloRequest(buffer_arg) {
+  return chat_pb.SayHelloRequest.deserializeBinary(new Uint8Array(buffer_arg));
+}
+
+function serialize_chat_SayHelloResponse(arg) {
+  if (!(arg instanceof chat_pb.SayHelloResponse)) {
+    throw new Error('Expected argument of type chat.SayHelloResponse');
+  }
+  return new Buffer(arg.serializeBinary());
+}
+
+function deserialize_chat_SayHelloResponse(buffer_arg) {
+  return chat_pb.SayHelloResponse.deserializeBinary(new Uint8Array(buffer_arg));
 }
 
 
-// ** Services **
-//
 var ChatService = exports.ChatService = {
-  messageStream: {
-    path: '/chat.Chat/MessageStream',
+  sayHello: {
+    path: '/chat.Chat/SayHello',
+    requestStream: false,
+    responseStream: false,
+    requestType: chat_pb.SayHelloRequest,
+    responseType: chat_pb.SayHelloResponse,
+    requestSerialize: serialize_chat_SayHelloRequest,
+    requestDeserialize: deserialize_chat_SayHelloRequest,
+    responseSerialize: serialize_chat_SayHelloResponse,
+    responseDeserialize: deserialize_chat_SayHelloResponse,
+  },
+  messages: {
+    path: '/chat.Chat/Messages',
     requestStream: true,
     responseStream: true,
-    requestType: chat_pb.MessageStreamRequest,
-    responseType: chat_pb.MessageStreamResponse,
-    requestSerialize: serialize_chat_MessageStreamRequest,
-    requestDeserialize: deserialize_chat_MessageStreamRequest,
-    responseSerialize: serialize_chat_MessageStreamResponse,
-    responseDeserialize: deserialize_chat_MessageStreamResponse,
+    requestType: chat_pb.MessagesRequest,
+    responseType: chat_pb.MessagesResponse,
+    requestSerialize: serialize_chat_MessagesRequest,
+    requestDeserialize: deserialize_chat_MessagesRequest,
+    responseSerialize: serialize_chat_MessagesResponse,
+    responseDeserialize: deserialize_chat_MessagesResponse,
   },
 };
 

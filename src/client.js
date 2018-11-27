@@ -1,15 +1,18 @@
 const grpc = require('grpc')
 
-const protoPath = require('path').join(__dirname, '..', 'proto')
-console.log("proto path : ", protoPath)
-const proto = grpc.load({ root: protoPath, file: 'chat.proto' })
+const services = require('../gen/chat_grpc_pb')
+const messages = require('../gen/chat_pb')
 
-const client = new proto.chat.Chat('localhost:50050', grpc.credentials.createInsecure())
+const client = new services.ChatClient('localhost:50050', grpc.credentials.createInsecure())
 
-client.sayHello({ name: 'my friend' }, (err, res) => {
+const helloRequest = new messages.SayHelloRequest()
+helloRequest.setName('my friend')
+
+client.sayHello(helloRequest, (err, res) => {
 	if (err) {
     console.log("Error:", err.message)
     return
   }
-  console.log(res.hello)
+  // console.log(services.ChatService.sayHello.responseDeserialize(res))
+  console.log(res)
 })
