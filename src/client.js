@@ -13,6 +13,5 @@ client.sayHello(helloRequest, (err, res) => {
     console.log("Error:", err.message)
     return
   }
-  // console.log(services.ChatService.sayHello.responseDeserialize(res))
-  console.log(res)
+  console.log(res.getHello())
 })
