@@ -5,14 +5,35 @@ const messages = require('../gen/chat_pb')
 
 const server = new grpc.Server()
 
+const users = []
+
+function notifyChat(res) {
+  users.forEach(user => {
+		const message = new messages.MessagesResponse()
+
+		message.setUsername(res.getUsername())
+		message.setMessage(res.getMessage())
+
+		user.write(message)
+  })
+}
+
 server.addService(services.ChatService, {
 	sayHello(call, callback){
-    const name = call.request.getName()
+		const name = call.request.getName()
 
-    const helloResponse = new messages.SayHelloResponse()
-    helloResponse.setHello(`Hello, ${name}`)
+		const helloResponse = new messages.SayHelloResponse()
+		helloResponse.setHello(`Hello, ${name}`)
 
-    callback(null, helloResponse)
+		callback(null, helloResponse)
+	},
+	messages(stream) {
+		console.log(stream)
+		users.push(stream)
+		stream.on('data', notifyChat)
+		stream.on('end', () => {
+			stream.end()
+		})
 	}
 })
 
